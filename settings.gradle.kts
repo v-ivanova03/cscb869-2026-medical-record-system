@@ -1,0 +1,1 @@
+rootProject.name = "cscb869-2026-medical-record-system"

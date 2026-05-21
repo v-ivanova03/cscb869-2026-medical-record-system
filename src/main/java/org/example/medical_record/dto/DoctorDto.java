@@ -24,9 +24,11 @@ public class DoctorDto {
     @NotBlank(message = "Специалността е задължителна")
     private String specialty;
 
+    // gp (не isGp) — за да работи ModelMapper коректно
     private boolean isGp;
 
     // Изчислени полета за справките — не се съхраняват в БД
     private Long patientCount;
     private Long examinationCount;
+    private Double totalRevenue;
 }

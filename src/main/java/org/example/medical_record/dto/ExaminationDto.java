@@ -25,12 +25,16 @@ public class ExaminationDto {
 
     // Референции към свързаните обекти — само id + display name
     // (не вгнездваме цели DTO-та)
-    private Long doctorId;
+    @NotNull(message = "Изберете лекар")
+    private Long doctorId;    // null = веднага ясна грешка
     private String doctorName;
 
+    @NotNull(message = "Изберете пациент")
     private Long patientId;
+
     private String patientName;
 
+    @NotNull(message = "Изберете диагноза")
     private Long diagnosisId;
     private String diagnosisName;
 

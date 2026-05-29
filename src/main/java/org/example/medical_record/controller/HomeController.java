@@ -22,13 +22,15 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         // Model добавя данни, достъпни в Thymeleaf чрез ${...}
-        model.addAttribute("doctorCount",    doctorService.getAllDoctors().size());
-        model.addAttribute("busiestMonth",   sickLeaveService.getMonthWithMostSickLeaves());
-        try {
-            model.addAttribute("mostCommonDiag", diagnosisService.getMostCommonDiagnosis());
-        } catch (Exception e) {
-            model.addAttribute("mostCommonDiag", null); // Показва "Няма данни"
-        }
+        model.addAttribute("doctorCount", doctorService.getAllDoctors().size());
+
+        model.addAttribute("mostCommonDiag", null);
+
+        model.addAttribute("busiestMonth", java.util.Map.of(
+                "month", 0,
+                "year", 0,
+                "count", 0
+        ));
         return "index";   // → templates/index.html
     }
 

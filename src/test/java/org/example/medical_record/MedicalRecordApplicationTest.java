@@ -9,7 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 // (H2 вместо MySQL) — иначе тестът ще се опита да се свърже с реалната БД
 @SpringBootTest
 @ActiveProfiles("test")
-class MedicalRecordApplicationTests {
+class MedicalRecordApplicationTest {
 
     // Проверява само че Spring контекстът се зарежда без грешки
     // Ако имаш грешка в конфигурацията, тя ще гръмне тук

@@ -40,7 +40,7 @@ public class AppUser {
     // Връзка към пациент (ако потребителят е пациент) — незадължително
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
-    @ToString.Exclude
+    @ToString.Exclude // предпазва от циклични референции
     private Patient patient;
 
     public boolean isAdmin()   { return "ROLE_ADMIN".equals(role); }

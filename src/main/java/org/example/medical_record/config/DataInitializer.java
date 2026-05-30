@@ -213,14 +213,6 @@ public class DataInitializer {
                             .build()
             ));
 
-            if (appUserRepository.findByUsername("admin").isEmpty()) {
-                appUserRepository.save(AppUser.builder()
-                        .username("admin")
-                        .password(passwordEncoder.encode("admin123"))
-                        .role("ROLE_ADMIN")
-                        .build());
-            }
-
             if (appUserRepository.findByUsername("doctor1").isEmpty()) {
                 appUserRepository.save(AppUser.builder()
                         .username("doctor1")

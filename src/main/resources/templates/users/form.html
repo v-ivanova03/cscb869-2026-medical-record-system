@@ -10,7 +10,7 @@
         th:object="${user}" method="post" class="card p-4">
 
     <div class="mb-3">
-      <label class="form-label">Потребителско ime <span class="text-danger">*</span></label>
+      <label class="form-label">Потребителско име <span class="text-danger">*</span></label>
       <input type="text" th:field="*{username}" class="form-control"
              th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'"
              th:readonly="${user.id != null}"/>

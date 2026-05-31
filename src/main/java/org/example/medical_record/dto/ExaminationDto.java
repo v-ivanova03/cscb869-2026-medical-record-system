@@ -38,7 +38,6 @@ public class ExaminationDto {
     private Long diagnosisId;
     private String diagnosisName;
 
-    // Болничният е незадължителен
     private SickLeaveDto sickLeave;
 
     // Дали пациентът е осигурен — ползва се в UI-а

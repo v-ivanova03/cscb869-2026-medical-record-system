@@ -24,16 +24,20 @@
       <div class="invalid-feedback" th:errors="*{egn}"></div>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Личен лекар</label>
-      <!-- th:select + th:option генерират <select> от списък -->
-      <select th:field="*{gpDoctorId}" class="form-select">
-        <option value="" disabled selected>— Изберете личен лекар —</option>
-        <option th:each="doc : ${gpDoctors}"
-                th:value="${doc.id}"
-                th:text="${doc.name}"></option>
-      </select>
-    </div>
+      <div class="mb-3">
+        <label class="form-label">Личен лекар <span class="text-danger">*</span></label>
+        <!-- th:select + th:option генерират <select> от списък -->
+        <select th:field="*{gpDoctorId}" class="form-select"
+                th:classappend="${#fields.hasErrors('gpDoctorId')} ? 'is-invalid'">
+          <option value="">— Изберете личен лекар —</option>
+          <option th:each="doc : ${gpDoctors}"
+                  th:value="${doc.id}"
+                  th:text="${doc.name}">
+          </option>
+        </select>
+
+        <div class="invalid-feedback" th:errors="*{gpDoctorId}"></div>
+      </div>
 
     <div class="mb-3 form-check">
       <input type="checkbox" th:field="*{insured}" class="form-check-input"/>

@@ -1,6 +1,7 @@
 package org.example.medical_record.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
@@ -23,6 +24,8 @@ public class PatientDto {
 
     // Показваме само id и name на личния лекар — не целия DoctorDto
     // (избягваме безкрайно вгнездване)
+    @NotNull(message = "Личният лекар е задължителен")
     private Long gpDoctorId;
+
     private String gpDoctorName;
 }

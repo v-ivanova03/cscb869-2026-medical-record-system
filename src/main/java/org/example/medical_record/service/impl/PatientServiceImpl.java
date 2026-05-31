@@ -41,11 +41,10 @@ public class PatientServiceImpl implements PatientService {
         patient.setEgn(dto.getEgn());
         patient.setInsured(dto.isInsured());
 
-        if (dto.getGpDoctorId() != null) {
-            Doctor gp = doctorRepository.findById(dto.getGpDoctorId())
-                    .orElseThrow(() -> new NoSuchElementException("Лекар не съществува"));
-            patient.setGpDoctor(gp);
-        }
+        Doctor gp = doctorRepository.findById(dto.getGpDoctorId())
+                .orElseThrow(() -> new NoSuchElementException("Личният лекар не съществува"));
+
+        patient.setGpDoctor(gp);
 
         Patient saved = patientRepository.save(patient);
         return toDto(saved);
@@ -58,11 +57,10 @@ public class PatientServiceImpl implements PatientService {
         existing.setName(dto.getName());
         existing.setEgn(dto.getEgn());
         existing.setInsured(dto.isInsured());
-        if (dto.getGpDoctorId() != null) {
-            Doctor gp = doctorRepository.findById(dto.getGpDoctorId())
-                    .orElseThrow(() -> new NoSuchElementException("Лекар не съществува"));
-            existing.setGpDoctor(gp);
-        }
+        Doctor gp = doctorRepository.findById(dto.getGpDoctorId())
+                .orElseThrow(() -> new NoSuchElementException("Личният лекар не съществува"));
+
+        existing.setGpDoctor(gp);
         return toDto(patientRepository.save(existing));
     }
 

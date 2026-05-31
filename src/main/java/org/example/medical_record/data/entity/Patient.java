@@ -46,7 +46,7 @@ public class Patient {
     //             която е foreign key към таблица "doctors"
     // nullable = true защото пациент може временно да няма личен лекар
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gp_doctor_id", nullable = true)
+    @JoinColumn(name = "gp_doctor_id", nullable = false)
     @ToString.Exclude
     private Doctor gpDoctor;
 

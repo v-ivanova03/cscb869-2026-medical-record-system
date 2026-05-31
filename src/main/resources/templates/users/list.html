@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Управление на потребители</h3>
+    <a th:href="@{/users/create}" class="btn btn-primary btn-sm">+ Нов потребител</a>
+  </div>
+  <div class="card">
+    <table class="table table-hover mb-0">
+      <thead><tr>
+        <th>#</th><th>Потребителско ime</th><th>Роля</th>
+        <th>Свързан с</th><th>Действия</th>
+      </tr></thead>
+      <tbody>
+      <tr th:each="u : ${users}">
+        <td th:text="${u.id}"></td>
+        <td th:text="${u.username}"></td>
+        <td>
+                        <span th:switch="${u.role}">
+                            <span th:case="'ROLE_ADMIN'"   class="badge bg-danger">ADMIN</span>
+                            <span th:case="'ROLE_DOCTOR'"  class="badge bg-primary">DOCTOR</span>
+                            <span th:case="'ROLE_PATIENT'" class="badge bg-success">PATIENT</span>
+                        </span>
+        </td>
+        <td>
+          <span th:if="${u.doctorName != null}" th:text="'Лекар: ' + ${u.doctorName}"></span>
+          <span th:if="${u.patientName != null}" th:text="'Пациент: ' + ${u.patientName}"></span>
+          <span th:if="${u.doctorName == null and u.patientName == null}">—</span>
+        </td>
+        <td>
+          <a th:href="@{/users/{id}/edit(id=${u.id})}"
+             class="btn btn-sm btn-outline-secondary">Редактирай</a>
+          <form th:action="@{/users/{id}/delete(id=${u.id})}" method="post"
+                class="d-inline" onsubmit="return confirm('Изтриване на потребител?')">
+            <button class="btn btn-sm btn-outline-danger">Изтрий</button>
+          </form>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(users)}">
+        <td colspan="5" class="text-center text-muted py-3">Няма потребители.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

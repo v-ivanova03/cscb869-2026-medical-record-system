@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Пациенти</h3>
+    <a th:href="@{/patients/create}" class="btn btn-primary btn-sm"
+       sec:authorize="hasRole('ADMIN')">+ Добави пациент</a>
+  </div>
+  <div class="card">
+    <table class="table table-hover mb-0">
+      <thead><tr>
+        <th>#</th><th>Име</th><th>ЕГН</th><th>Личен лекар</th>
+        <th>Осигурен</th><th>Действия</th>
+      </tr></thead>
+      <tbody>
+      <tr th:each="p : ${patients}">
+        <td th:text="${p.id}"></td>
+        <td th:text="${p.name}"></td>
+        <td th:text="${p.egn}"></td>
+        <td th:text="${p.gpDoctorName ?: '—'}"></td>
+        <td>
+          <span th:if="${p.insured}"   class="badge-insured">Да (НЗОК)</span>
+          <span th:unless="${p.insured}" class="badge-uninsured">Не (самоплащане)</span>
+        </td>
+        <td>
+          <a th:href="@{/patients/{id}/history(id=${p.id})}"
+             class="btn btn-sm btn-outline-info">История</a>
+          <a th:href="@{/patients/{id}/edit(id=${p.id})}"
+             class="btn btn-sm btn-outline-secondary"
+             sec:authorize="hasRole('ADMIN')">Редактирай</a>
+          <form th:action="@{/patients/{id}/delete(id=${p.id})}" method="post"
+                class="d-inline" onsubmit="return confirm('Изтриване на пациент?')"
+                sec:authorize="hasRole('ADMIN')">
+            <button class="btn btn-sm btn-outline-danger">Изтрий</button>
+          </form>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(patients)}">
+        <td colspan="6" class="text-center text-muted py-3">Няма регистрирани пациенти.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

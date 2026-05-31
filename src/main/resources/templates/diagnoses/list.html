@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Диагнози</h3>
+    <a th:href="@{/diagnoses/create}" class="btn btn-primary btn-sm"
+       sec:authorize="hasAnyRole('ADMIN','DOCTOR')">+ Добави диагноза</a>
+  </div>
+  <div class="card">
+    <table class="table table-hover mb-0">
+      <thead><tr>
+        <th>#</th><th>Наименование</th><th>Описание</th><th>Брой прегледи</th><th>Действия</th>
+      </tr></thead>
+      <tbody>
+      <tr th:each="d : ${diagnoses}">
+        <td th:text="${d.id}"></td>
+        <td th:text="${d.name}"></td>
+        <td th:text="${d.description ?: '—'}"></td>
+        <td>
+          <span class="badge bg-secondary" th:text="${d.examinationCount ?: 0}"></span>
+        </td>
+        <td>
+          <a th:href="@{/diagnoses/{id}/patients(id=${d.id})}"
+             class="btn btn-sm btn-outline-info">Пациенти</a>
+          <a th:href="@{/diagnoses/{id}/edit(id=${d.id})}"
+             class="btn btn-sm btn-outline-secondary"
+             sec:authorize="hasAnyRole('ADMIN','DOCTOR')">Редактирай</a>
+          <form th:action="@{/diagnoses/{id}/delete(id=${d.id})}" method="post"
+                class="d-inline" onsubmit="return confirm('Изтриване?')"
+                sec:authorize="hasRole('ADMIN')">
+            <button class="btn btn-sm btn-outline-danger">Изтрий</button>
+          </form>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(diagnoses)}">
+        <td colspan="5" class="text-center text-muted py-3">Няма диагнози.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

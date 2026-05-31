@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container">
+  <div class="d-flex align-items-center gap-3 mb-4">
+    <a th:href="@{/patients}" class="btn btn-outline-secondary btn-sm">← Назад</a>
+    <h3 class="mb-0">
+      История на <span th:text="${patient.name}"></span>
+      <small class="text-muted fs-6" th:text="'ЕГН: ' + ${patient.egn}"></small>
+    </h3>
+    <span th:if="${patient.insured}"    class="badge-insured ms-auto">Осигурен (НЗОК)</span>
+    <span th:unless="${patient.insured}" class="badge-uninsured ms-auto">Неосигурен</span>
+  </div>
+
+  <div class="card">
+    <table class="table table-hover mb-0">
+      <thead><tr>
+        <th>Дата</th><th>Лекар</th><th>Диагноза</th>
+        <th>Лечение</th><th>Цена</th><th>Болничен</th>
+      </tr></thead>
+      <tbody>
+      <tr th:each="e : ${examinations}">
+        <td th:text="${#temporals.format(e.date,'dd.MM.yyyy')}"></td>
+        <td th:text="${e.doctorName}"></td>
+        <td th:text="${e.diagnosisName}"></td>
+        <td th:text="${e.treatment ?: '—'}"></td>
+        <td>
+          <!-- Ако пациентът е осигурен → "НЗОК", иначе → сумата -->
+          <span th:if="${e.patientInsured}" class="text-success fw-semibold">НЗОК</span>
+          <span th:unless="${e.patientInsured}"
+                th:text="${#numbers.formatDecimal(e.price,1,2)} + ' €'"></span>
+        </td>
+        <td>
+                        <span th:if="${e.sickLeave != null}"
+                              th:text="${#temporals.format(e.sickLeave.startDate,'dd.MM.yyyy')}
+                                       + ' (' + ${e.sickLeave.totalDays} + ' дни)'">
+                        </span>
+          <span th:if="${e.sickLeave == null}" class="text-muted">—</span>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(examinations)}">
+        <td colspan="6" class="text-center text-muted py-3">Няма прегледи.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

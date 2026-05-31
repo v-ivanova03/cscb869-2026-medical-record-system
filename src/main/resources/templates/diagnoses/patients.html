@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container">
+  <div class="d-flex align-items-center gap-3 mb-4">
+    <a th:href="@{/diagnoses}" class="btn btn-outline-secondary btn-sm">← Назад</a>
+    <h3 class="mb-0">Пациенти с диагноза: <span th:text="${diagnosis.name}" class="text-primary"></span></h3>
+  </div>
+
+  <div class="card">
+    <table class="table table-hover mb-0">
+      <thead><tr>
+        <th>#</th><th>Ime</th><th>ЕГН</th><th>Личен лекар</th><th>Осигурен</th>
+      </tr></thead>
+      <tbody>
+      <tr th:each="p : ${patients}">
+        <td th:text="${p.id}"></td>
+        <td>
+          <a th:href="@{/patients/{id}/history(id=${p.id})}"
+             th:text="${p.name}"></a>
+        </td>
+        <td th:text="${p.egn}"></td>
+        <td th:text="${p.gpDoctorName ?: '—'}"></td>
+        <td>
+          <span th:if="${p.insured}"    class="badge-insured">Да</span>
+          <span th:unless="${p.insured}" class="badge-uninsured">Не</span>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(patients)}">
+        <td colspan="5" class="text-center text-muted py-3">
+          Няма пациенти с тази диагноза.
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

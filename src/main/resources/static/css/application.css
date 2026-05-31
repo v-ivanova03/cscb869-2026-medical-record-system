@@ -1,0 +1,37 @@
+/* application.css — допълнителни стилове над Bootstrap */
+
+/* Значки за осигурителен статус */
+.badge-insured {
+    background-color: #d1fae5;
+    color: #065f46;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: .8rem;
+    font-weight: 500;
+}
+
+.badge-uninsured {
+    background-color: #fee2e2;
+    color: #991b1b;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: .8rem;
+    font-weight: 500;
+}
+
+/* Заглавия на таблици */
+thead th {
+    font-weight: 500;
+    background-color: #f1f5f9;
+}
+
+/* Карти */
+.card {
+    border: none;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+}
+
+/* Тяло на страницата */
+body {
+    background-color: #f8f9fa;
+}

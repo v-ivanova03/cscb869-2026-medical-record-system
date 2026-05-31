@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<div class="container">
+    <h2 class="mb-4">
+        Добре дошли, <span sec:authentication="name"></span>!
+    </h2>
+
+    <div class="row g-4">
+        <!-- Карта: Брой лекари -->
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <div style="font-size:2.5rem">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+
+                <h3 class="mt-2" th:text="${doctorCount}">0</h3>
+
+                <p class="text-muted mb-0">Регистрирани лекари</p>
+
+                <a th:href="@{/doctors}"
+                   class="btn btn-outline-primary btn-sm mt-3">
+                    Виж всички
+                </a>
+            </div>
+        </div>
+
+        <!-- Карта: Най-честа диагноза -->
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <div style="font-size:2.5rem">
+                    <i class="bi bi-clipboard2-pulse"></i>
+                </div>
+
+                <h3 class="mt-2"
+                    th:text="${mostCommonDiag != null && mostCommonDiag.present
+                        ? mostCommonDiag.get().name
+                        : 'Няма данни'}">
+                    —
+                </h3>
+
+                <p class="text-muted mb-0">Най-честа диагноза</p>
+
+                <a th:href="@{/diagnoses}"
+                   class="btn btn-outline-primary btn-sm mt-3">
+                    Виж диагнози
+                </a>
+            </div>
+        </div>
+
+        <!-- Карта: Месец с най-много болнични -->
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <div style="font-size:2.5rem">
+                    <i class="bi bi-calendar2-week"></i>
+                </div>
+
+                <h3 class="mt-2"
+                    th:text="${busiestMonth['month'] != 0}
+                        ? ${busiestMonth['month']} + '/' + ${busiestMonth['year']}
+                        : 'Няма данни'">
+                    —
+                </h3>
+
+                <p class="text-muted mb-0">Месец с най-много болнични</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Бързи връзки по роля -->
+    <div class="mt-5">
+        <h5>
+            <i class="bi bi-lightning-charge"></i>
+            Бързи действия
+        </h5>
+
+        <div class="d-flex flex-wrap gap-2">
+            <a th:href="@{/examinations/create}"
+               class="btn btn-primary"
+               sec:authorize="hasAnyRole('ADMIN','DOCTOR')">
+                <i class="bi bi-plus-circle"></i>
+                Нов преглед
+            </a>
+
+            <a th:href="@{/patients/create}"
+               class="btn btn-outline-primary"
+               sec:authorize="hasRole('ADMIN')">
+                <i class="bi bi-plus-circle"></i>
+                Нов пациент
+            </a>
+
+            <a th:href="@{/doctors/create}"
+               class="btn btn-outline-primary"
+               sec:authorize="hasRole('ADMIN')">
+                <i class="bi bi-plus-circle"></i>
+                Нов лекар
+            </a>
+
+            <a th:href="@{/examinations/filter}"
+               class="btn btn-outline-secondary"
+               sec:authorize="hasAnyRole('ADMIN','DOCTOR')">
+                <i class="bi bi-calendar-range"></i>
+                Прегледи по период
+            </a>
+
+            <a th:href="@{/users}"
+               class="btn btn-outline-secondary"
+               sec:authorize="hasRole('ADMIN')">
+                <i class="bi bi-person-gear"></i>
+                Потребители
+            </a>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<div class="container">
+  <h3 class="mb-4">Справки за лекари</h3>
+
+  <!-- Лекар(и) с най-много болнични -->
+  <div class="card mb-4 p-3">
+    <h5>
+      <i class="bi bi-trophy"></i>
+      Лекар(и) с най-много издадени болнични
+    </h5>
+
+    <ul class="list-group list-group-flush mt-2">
+      <li class="list-group-item"
+          th:each="d : ${mostSickLeaves}"
+          th:text="${d.name}">
+      </li>
+
+      <li class="list-group-item text-muted"
+          th:if="${#lists.isEmpty(mostSickLeaves)}">
+        Няма данни
+      </li>
+    </ul>
+  </div>
+
+  <!-- Брой пациенти -->
+  <div class="card mb-4 p-3">
+    <h5>
+      <i class="bi bi-people-fill"></i>
+      Брой пациенти при всеки личен лекар
+    </h5>
+
+    <table class="table table-hover mt-2 mb-0">
+      <thead>
+      <tr>
+        <th>Лекар</th>
+        <th>Специалност</th>
+        <th>Пациенти</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr th:each="d : ${byPatients}">
+        <td th:text="${d.name}"></td>
+        <td th:text="${d.specialty}"></td>
+        <td>
+                    <span class="badge bg-primary"
+                          th:text="${d.patientCount}">
+                    </span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Брой прегледи -->
+  <div class="card p-3">
+    <h5>
+      <i class="bi bi-clipboard2-pulse"></i>
+      Брой посещения (прегледи) при всеки лекар
+    </h5>
+
+    <table class="table table-hover mt-2 mb-0">
+      <thead>
+      <tr>
+        <th>Лекар</th>
+        <th>Специалност</th>
+        <th>Прегледи</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr th:each="d : ${byExaminations}">
+        <td th:text="${d.name}"></td>
+        <td th:text="${d.specialty}"></td>
+        <td>
+                    <span class="badge bg-info text-dark"
+                          th:text="${d.examinationCount}">
+                    </span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

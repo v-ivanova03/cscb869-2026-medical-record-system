@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Прегледи</h3>
+        <a th:href="@{/examinations/create}" class="btn btn-primary btn-sm"
+           sec:authorize="hasAnyRole('ADMIN','DOCTOR')">+ Нов преглед</a>
+    </div>
+
+    <div class="card">
+        <table class="table table-hover mb-0">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Дата</th>
+                <th>Пациент</th>
+                <th>Лекар</th>
+                <th>Диагноза</th>
+                <th>Цена</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="e : ${examinations}">
+                <td th:text="${e.id}"></td>
+                <td th:text="${#temporals.format(e.date,'dd.MM.yyyy')}"></td>
+                <td th:text="${e.patientName}"></td>
+                <td th:text="${e.doctorName}"></td>
+                <td th:text="${e.diagnosisName ?: '—'}"></td>
+                <td>
+                    <span th:if="${e.patientInsured}" class="text-success fw-semibold">НЗОК</span>
+                    <span th:unless="${e.patientInsured}"
+                          th:text="${#numbers.formatDecimal(e.price,1,2)} + ' €'"></span>
+                </td>
+                <td>
+                    <span th:if="${e.patientInsured}" class="badge-insured">Осигурен</span>
+                    <span th:unless="${e.patientInsured}" class="badge-uninsured">Самоплащане</span>
+                </td>
+                <td>
+                    <a th:href="@{/examinations/{id}/edit(id=${e.id})}"
+                       class="btn btn-sm btn-outline-secondary"
+                       sec:authorize="hasAnyRole('ADMIN','DOCTOR')">Редактирай</a>
+
+                    <form th:action="@{/examinations/{id}/delete(id=${e.id})}" method="post"
+                          class="d-inline" onsubmit="return confirm('Изтриване на преглед?')"
+                          sec:authorize="hasRole('ADMIN')">
+                        <button class="btn btn-sm btn-outline-danger">Изтрий</button>
+                    </form>
+                </td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(examinations)}">
+                <td colspan="8" class="text-center text-muted py-3">
+                    Няма регистрирани прегледи.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

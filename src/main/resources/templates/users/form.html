@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<nav th:replace="~{fragments :: navbar}"></nav>
+<div class="container" style="max-width:520px">
+  <h3 class="mb-4" th:text="${user.id == null} ? 'Нов потребител' : 'Редактиране на потребител'"></h3>
+
+  <form th:action="${user.id == null} ? @{/users/create} : @{/users/{id}/edit(id=${user.id})}"
+        th:object="${user}" method="post" class="card p-4">
+
+    <div class="mb-3">
+      <label class="form-label">Потребителско ime <span class="text-danger">*</span></label>
+      <input type="text" th:field="*{username}" class="form-control"
+             th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'"
+             th:readonly="${user.id != null}"/>
+      <div class="invalid-feedback" th:errors="*{username}"></div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">
+        Парола
+        <span th:if="${user.id == null}" class="text-danger">*</span>
+        <small th:if="${user.id != null}" class="text-muted">(оставете празно за без промяна)</small>
+      </label>
+      <input type="password" th:field="*{password}" class="form-control"
+             th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'"/>
+      <div class="invalid-feedback" th:errors="*{password}"></div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Роля <span class="text-danger">*</span></label>
+      <select th:field="*{role}" class="form-select">
+        <option value="">— Избери роля —</option>
+        <option value="ROLE_ADMIN">ADMIN</option>
+        <option value="ROLE_DOCTOR">DOCTOR</option>
+        <option value="ROLE_PATIENT">PATIENT</option>
+      </select>
+      <div class="invalid-feedback" th:errors="*{role}"></div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Свързан лекар (за DOCTOR роля)</label>
+      <select th:field="*{doctorId}" class="form-select">
+        <option value="">— Без лекар —</option>
+        <option th:each="d : ${doctors}"
+                th:value="${d.id}"
+                th:text="${d.name + ' — ' + d.specialty}"></option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Свързан пациент (за PATIENT роля)</label>
+      <select th:field="*{patientId}" class="form-select">
+        <option value="">— Без пациент —</option>
+        <option th:each="p : ${patients}"
+                th:value="${p.id}"
+                th:text="${p.name + ' (' + p.egn + ')'}"></option>
+      </select>
+    </div>
+
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-primary">Запази</button>
+      <a th:href="@{/users}" class="btn btn-outline-secondary">Отказ</a>
+    </div>
+  </form>
+</div>
+<footer th:replace="~{fragments :: footer}"></footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
